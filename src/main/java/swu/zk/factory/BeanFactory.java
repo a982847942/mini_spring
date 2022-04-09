@@ -13,4 +13,5 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public  interface BeanFactory {
    Object getBean(String name);
+   Object getBean(String name,Object...args);
 }
