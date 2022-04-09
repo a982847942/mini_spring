@@ -1,9 +1,11 @@
 package swu.zk;
 
 import org.junit.Test;
+import swu.zk.bean.UserDao;
 import swu.zk.bean.UserService;
 import swu.zk.factory.BeanFactory;
 import swu.zk.factory.config.BeanDefinition;
+import swu.zk.factory.config.BeanReference;
 import swu.zk.factory.support.BeanDefinitionRegistry;
 import swu.zk.factory.support.DefaultListableBeanFactory;
 import swu.zk.factory.support.SimpleInstantiationStrategy;
@@ -37,6 +39,25 @@ public class APITest {
         beanFactory.registryBeanDefinition("userService",beanDefinition);
         UserService userService = (UserService)beanFactory.getBean("userService","brain");
 //        UserService userService = (UserService)beanFactory.getBean("userService");
+        userService.queryUserInfo();
+    }
+
+
+    @Test
+    public void test_property(){
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+        beanFactory.registryBeanDefinition("userDao",new BeanDefinition(UserDao.class));
+
+
+        PropertyValues propertyValues = new PropertyValues();
+        propertyValues.addPropertyValue(new PropertyValue("uId", "10001"));
+        propertyValues.addPropertyValue(new PropertyValue("userDao",new BeanReference("userDao")));
+
+        BeanDefinition beanDefinition = new BeanDefinition(UserService.class,propertyValues);
+
+        beanFactory.registryBeanDefinition("userService",beanDefinition);
+
+        UserService userService = (UserService) beanFactory.getBean("userService");
         userService.queryUserInfo();
 
     }

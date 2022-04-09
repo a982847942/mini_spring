@@ -31,7 +31,9 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
                 return clazz.getDeclaredConstructor(ctor.getParameterTypes()).newInstance(args);
             }
             //无参
-            return clazz.getDeclaredConstructor().newInstance();
+            Constructor defaultConstructor = clazz.getDeclaredConstructor();
+            defaultConstructor.setAccessible(true);
+            return defaultConstructor.newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new BeansException("Failed to instantiate [" + clazz.getName() + "]\", e");
         }

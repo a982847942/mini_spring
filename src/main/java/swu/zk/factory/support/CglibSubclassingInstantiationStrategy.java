@@ -2,6 +2,7 @@ package swu.zk.factory.support;
 
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;
+import swu.zk.BeansException;
 import swu.zk.factory.config.BeanDefinition;
 
 import java.lang.reflect.Constructor;
@@ -31,7 +32,13 @@ public class CglibSubclassingInstantiationStrategy implements InstantiationStrat
                 return super.hashCode();
             }
         });
-        if (null == ctor) return enhancer.create();
+        if (null == ctor){
+//                ctor = beanDefinition.getBeanClass().getDeclaredConstructor();
+//                ctor.setAccessible(true);
+//                return enhancer.create(ctor.getParameterTypes(),args);
+            //cglib无法代理 private方法
+                return enhancer.create();
+        }
         return enhancer.create(ctor.getParameterTypes(), args);
     }
 }

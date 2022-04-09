@@ -7,22 +7,40 @@ package swu.zk.bean;
  * @Created by brain
  */
 public class UserService {
-    private String name;
 
-    public UserService(String name) {
-        this.name = name;
+    private String uId;
+
+    private UserDao userDao;
+
+    public void queryUserInfo(){
+        System.out.println("查询用户信息"  + userDao.queryUserName(uId));
     }
 
     public UserService() {
     }
+    public UserService(String uId, UserDao userDao) {
+        this.uId = uId;
+        this.userDao = userDao;
+    }
 
-    public void queryUserInfo(){
-        System.out.println("查询用户信息" + name);
+    public String getuId() {
+        return uId;
     }
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("");
-        sb.append("").append(name);
-        return sb.toString();
+
+    public void setuId(String uId) {
+        this.uId = uId;
     }
+
+    public UserDao getUserDao() {
+        return userDao;
+    }
+
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+
+
+
+
 }
