@@ -1,0 +1,36 @@
+package swu.zk.io;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+/**
+ * @Classname FileSystemResource
+ * @Description TODO
+ * @Date 2022/4/9 14:17
+ * @Created by brain
+ */
+public class FileSystemResource implements Resource{
+    private final File file;
+    private final String path;
+
+    public FileSystemResource(File file) {
+        this.file = file;
+        this.path = file.getPath();
+    }
+
+    public FileSystemResource(String path) {
+        this.path = path;
+        this.file = new File(path);
+    }
+
+    @Override
+    public InputStream getInputStream() throws IOException {
+        return new FileInputStream(this.file);
+    }
+
+    public String getPath() {
+        return path;
+    }
+}
