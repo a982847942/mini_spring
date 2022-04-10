@@ -1,7 +1,7 @@
-package swu.zk.factory.support;
+package swu.zk.beans.factory.support;
 
-import swu.zk.BeansException;
-import swu.zk.factory.config.BeanDefinition;
+import swu.zk.beans.BeansException;
+import swu.zk.beans.factory.config.BeanDefinition;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

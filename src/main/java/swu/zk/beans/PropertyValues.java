@@ -1,4 +1,4 @@
-package swu.zk;
+package swu.zk.beans;
 
 import java.util.ArrayList;
 import java.util.List;

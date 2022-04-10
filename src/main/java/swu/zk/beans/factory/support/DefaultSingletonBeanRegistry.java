@@ -1,6 +1,6 @@
-package swu.zk.factory.support;
+package swu.zk.beans.factory.support;
 
-import swu.zk.factory.config.SingletonBeanRegistry;
+import swu.zk.beans.factory.config.SingletonBeanRegistry;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

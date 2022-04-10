@@ -1,6 +1,6 @@
-package swu.zk.factory.support;
+package swu.zk.beans.factory.support;
 
-import swu.zk.factory.config.BeanDefinition;
+import swu.zk.beans.factory.config.BeanDefinition;
 
 /**
  * @Classname BeanDefinitionRegistry
@@ -15,4 +15,6 @@ public interface BeanDefinitionRegistry {
      * @param beanDefinition
      */
     void registryBeanDefinition(String beanName, BeanDefinition beanDefinition);
+
+    boolean containsBeanDefinition(String beanName);
 }

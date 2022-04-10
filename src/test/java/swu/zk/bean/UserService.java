@@ -9,19 +9,24 @@ package swu.zk.bean;
 public class UserService {
 
     private String uId;
-
+    private String company;
+    private String location;
     private UserDao userDao;
-
-    public void queryUserInfo(){
-        System.out.println("查询用户信息"  + userDao.queryUserName(uId));
-    }
 
     public UserService() {
     }
-    public UserService(String uId, UserDao userDao) {
+
+    public UserService(String uId, String company, String location, UserDao userDao) {
         this.uId = uId;
+        this.company = company;
+        this.location = location;
         this.userDao = userDao;
     }
+
+    public String queryUserInfo() {
+        return userDao.queryUserName(uId);
+    }
+
 
     public String getuId() {
         return uId;
@@ -29,6 +34,22 @@ public class UserService {
 
     public void setuId(String uId) {
         this.uId = uId;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public UserDao getUserDao() {
@@ -39,8 +60,13 @@ public class UserService {
         this.userDao = userDao;
     }
 
-
-
-
-
+    @Override
+    public String toString() {
+        return "UserService{" +
+                "uId='" + uId + '\'' +
+                ", company='" + company + '\'' +
+                ", location='" + location + '\'' +
+                ", userDao=" + userDao +
+                '}';
+    }
 }

@@ -1,4 +1,4 @@
-package swu.zk;
+package swu.zk.beans;
 
 /**
  * @Classname PropertyValues

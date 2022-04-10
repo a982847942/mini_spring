@@ -1,4 +1,4 @@
-package swu.zk.factory.config;
+package swu.zk.beans.factory.config;
 
 /**
  * @Classname BeanReference

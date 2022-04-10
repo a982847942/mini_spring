@@ -1,4 +1,4 @@
-package swu.zk.factory.config;
+package swu.zk.beans.factory.config;
 
 /**
  * @Classname BeanDedinition
@@ -7,7 +7,7 @@ package swu.zk.factory.config;
  * @Created by brain
  */
 
-import swu.zk.PropertyValues;
+import swu.zk.beans.PropertyValues;
 
 /**
  * 对bean的映射，包括bean对应的class(交给容器去创建 不要自己手动new)以及 后续的id 等

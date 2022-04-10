@@ -1,9 +1,6 @@
-package swu.zk.factory;
+package swu.zk.beans.factory;
 
-import swu.zk.factory.config.BeanDefinition;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import swu.zk.beans.BeansException;
 
 /**
  * @Classname BeanFactory
@@ -14,4 +11,5 @@ import java.util.concurrent.ConcurrentHashMap;
 public  interface BeanFactory {
    Object getBean(String name);
    Object getBean(String name,Object...args);
+   <T> T getBean(String name, Class<T> requiredType) throws BeansException;
 }

@@ -3,12 +3,11 @@ package swu.zk;
 import org.junit.Test;
 import swu.zk.bean.UserDao;
 import swu.zk.bean.UserService;
-import swu.zk.factory.BeanFactory;
-import swu.zk.factory.config.BeanDefinition;
-import swu.zk.factory.config.BeanReference;
-import swu.zk.factory.support.BeanDefinitionRegistry;
-import swu.zk.factory.support.DefaultListableBeanFactory;
-import swu.zk.factory.support.SimpleInstantiationStrategy;
+import swu.zk.beans.PropertyValue;
+import swu.zk.beans.PropertyValues;
+import swu.zk.beans.factory.config.BeanDefinition;
+import swu.zk.beans.factory.config.BeanReference;
+import swu.zk.beans.factory.support.DefaultListableBeanFactory;
 
 /**
  * @Classname APITest
@@ -59,6 +58,5 @@ public class APITest {
 
         UserService userService = (UserService) beanFactory.getBean("userService");
         userService.queryUserInfo();
-
     }
 }

@@ -1,9 +1,8 @@
-package swu.zk.factory.support;
+package swu.zk.beans.factory.support;
 
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;
-import swu.zk.BeansException;
-import swu.zk.factory.config.BeanDefinition;
+import swu.zk.beans.factory.config.BeanDefinition;
 
 import java.lang.reflect.Constructor;
 
