@@ -3,7 +3,7 @@
 
     <bean id="userDao" class="swu.zk.bean.UserDao" init-method="initDataMethod" destroy-method="destroyDataMethod"/>
 
-    <bean id="userService" class="swu.zk.bean.UserService">
+    <bean id="userService2" class="swu.zk.bean.UserService2">
         <property name="uId" value="10001"/>
         <property name="company" value="腾讯"/>
         <property name="location" value="深圳"/>

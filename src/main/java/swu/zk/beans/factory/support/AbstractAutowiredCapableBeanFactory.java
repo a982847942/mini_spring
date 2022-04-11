@@ -5,8 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import swu.zk.beans.BeansException;
 import swu.zk.beans.PropertyValue;
 import swu.zk.beans.PropertyValues;
-import swu.zk.beans.factory.DisposableBean;
-import swu.zk.beans.factory.InitializingBean;
+import swu.zk.beans.factory.*;
 import swu.zk.beans.factory.config.AutowireCapableBeanFactory;
 import swu.zk.beans.factory.config.BeanDefinition;
 import swu.zk.beans.factory.config.BeanPostProcessor;
@@ -137,6 +136,21 @@ public abstract class AbstractAutowiredCapableBeanFactory extends AbstractBeanFa
     }
 
     private void invokeInitMethods(String beanName, Object wrappedBean, BeanDefinition beanDefinition) throws Exception {
+        // invokeAwareMethods
+        if (wrappedBean instanceof Aware) {
+            if (wrappedBean instanceof BeanFactoryAware) {
+                ((BeanFactoryAware) wrappedBean).setBeanFactory(this);
+            }
+            if (wrappedBean instanceof BeanClassLoaderAware){
+                ((BeanClassLoaderAware) wrappedBean).setBeanClassLoader(getClassLoader());
+            }
+            if (wrappedBean instanceof BeanNameAware) {
+                ((BeanNameAware) wrappedBean).setBeanName(beanName);
+            }
+        }
+
+
+
         // 1. 实现接口 InitializingBean
         if (wrappedBean instanceof InitializingBean) {
             ((InitializingBean) wrappedBean).afterPropertiesSet();

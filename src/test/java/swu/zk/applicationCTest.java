@@ -4,6 +4,7 @@ import org.junit.Test;
 import swu.zk.bean.MyBeanFactoryPostProcessor;
 import swu.zk.bean.MyBeanPostProcessor;
 import swu.zk.bean.UserService;
+import swu.zk.bean.UserService2;
 import swu.zk.beans.context.support.ClassPathXmlApplicationContext;
 import swu.zk.beans.factory.support.DefaultListableBeanFactory;
 import swu.zk.beans.factory.xml.XMLBeanDefinitionReader;
@@ -66,5 +67,19 @@ public class applicationCTest {
         UserService userService = applicationContext.getBean("userService", UserService.class);
         String result = userService.queryUserInfo();
         System.out.println("测试结果：" + result);
+    }
+
+    @Test
+    public void test_xml3() {
+        // 1.初始化 BeanFactory
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        applicationContext.registerShutdownHook();
+
+        // 2. 获取Bean对象调用方法
+        UserService2 userService2 = applicationContext.getBean("userService2", UserService2.class);
+        String result = userService2.queryUserInfo();
+        System.out.println("测试结果：" + result);
+        System.out.println("ApplicationContextAware："+userService2.getApplicationContext());
+        System.out.println("BeanFactoryAware："+userService2.getBeanFactory());
     }
 }

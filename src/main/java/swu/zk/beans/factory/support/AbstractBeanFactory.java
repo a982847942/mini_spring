@@ -5,6 +5,7 @@ import swu.zk.beans.factory.BeanFactory;
 import swu.zk.beans.factory.config.BeanDefinition;
 import swu.zk.beans.factory.config.BeanPostProcessor;
 import swu.zk.beans.factory.config.ConfigurableBeanFactory;
+import swu.zk.util.ClassUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     /** BeanPostProcessors to apply in createBean */
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
 
+    private ClassLoader classLoader = ClassUtils.getDefaultClassloader();
     @Override
     public Object getBean(String name) {
 //        Object bean = getSingleton(name);
@@ -70,5 +72,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
         return this.beanPostProcessors;
     }
 
-
+    public ClassLoader getClassLoader() {
+        return this.classLoader;
+    }
 }
