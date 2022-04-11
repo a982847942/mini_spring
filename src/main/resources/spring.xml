@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
 
-    <bean id="userDao" class="swu.zk.bean.UserDao"/>
+    <bean id="userDao" class="swu.zk.bean.UserDao" init-method="initDataMethod" destroy-method="destroyDataMethod"/>
 
     <bean id="userService" class="swu.zk.bean.UserService">
         <property name="uId" value="10001"/>
@@ -10,7 +10,9 @@
         <property name="userDao" ref="userDao"/>
     </bean>
 
-    <bean class="swu.zk.bean.MyBeanPostProcessor"/>
-    <bean class="swu.zk.bean.MyBeanFactoryPostProcessor"/>
+<!--    <bean class="swu.zk.bean.MyBeanPostProcessor"/>-->
+<!--    <bean class="swu.zk.bean.MyBeanFactoryPostProcessor"/>-->
+
+
 
 </beans>

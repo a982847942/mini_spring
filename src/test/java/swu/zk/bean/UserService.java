@@ -1,17 +1,31 @@
 package swu.zk.bean;
 
+import swu.zk.beans.factory.DisposableBean;
+import swu.zk.beans.factory.InitializingBean;
+
 /**
  * @Classname UserService
  * @Description TODO
  * @Date 2022/4/8 20:52
  * @Created by brain
  */
-public class UserService {
+public class UserService implements InitializingBean, DisposableBean {
 
     private String uId;
     private String company;
     private String location;
     private UserDao userDao;
+
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("执行：UserService.destroy");
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("执行：UserService.afterPropertiesSet");
+    }
+
 
     public UserService() {
     }
