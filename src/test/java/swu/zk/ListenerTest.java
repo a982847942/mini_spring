@@ -34,5 +34,12 @@ public class ListenerTest {
     }
 
 
+    @Test
+    public void test3(){
+        StringBuilder buffer = new StringBuilder("abcdefg");
+        System.out.println(buffer.indexOf("b"));
+        buffer.replace(1,4,"ha");
+        System.out.println(buffer.toString());
+    }
 
 }

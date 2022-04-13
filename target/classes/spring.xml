@@ -14,20 +14,30 @@
     <!--    <bean class="swu.zk.bean.MyBeanFactoryPostProcessor"/>-->
 
 
-<!--    <bean id="userService" class="swu.zk.bean.UserService3" scope="prototype">-->
-<!--        <property name="uId" value="10001"/>-->
-<!--        <property name="company" value="腾讯"/>-->
-<!--        <property name="location" value="深圳"/>-->
-<!--        <property name="userDao" ref="proxyUserDao"/>-->
-<!--    </bean>-->
+    <!--    <bean id="userService" class="swu.zk.bean.UserService3" scope="prototype">-->
+    <!--        <property name="uId" value="10001"/>-->
+    <!--        <property name="company" value="腾讯"/>-->
+    <!--        <property name="location" value="深圳"/>-->
+    <!--        <property name="userDao" ref="proxyUserDao"/>-->
+    <!--    </bean>-->
 
-<!--    <bean id="proxyUserDao" class="swu.zk.bean.ProxyBeanFactory"/>-->
+    <!--    <bean id="proxyUserDao" class="swu.zk.bean.ProxyBeanFactory"/>-->
 
 
-    <bean class="swu.zk.bean.ContextRefreshedEventListener"/>
+    <!--    <bean class="swu.zk.bean.ContextRefreshedEventListener"/>-->
 
-    <bean class="swu.zk.bean.CustomEventListener"/>
+    <!--    <bean class="swu.zk.bean.CustomEventListener"/>-->
 
-    <bean class="swu.zk.bean.ContextClosedEventListener"/>
+    <!--    <bean class="swu.zk.bean.ContextClosedEventListener"/>-->
+
+
+    <bean class="swu.zk.beans.factory.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:token.properties"/>
+    </bean>
+
+    <bean id="userService" class="swu.zk.placeholder.UserService">
+        <property name="token" value="${token}"/>
+    </bean>
+
 
 </beans>
