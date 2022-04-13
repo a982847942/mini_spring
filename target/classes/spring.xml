@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
 
-    <bean id="userDao" class="swu.zk.bean.UserDao" init-method="initDataMethod" destroy-method="destroyDataMethod"/>
+    <!--    <bean id="userDao" class="swu.zk.bean.UserDao" init-method="initDataMethod" destroy-method="destroyDataMethod"/>-->
 
-    <bean id="userService2" class="swu.zk.bean.UserService2">
-        <property name="uId" value="10001"/>
-        <property name="company" value="腾讯"/>
-        <property name="location" value="深圳"/>
-        <property name="userDao" ref="userDao"/>
-    </bean>
+    <!--    <bean id="userService2" class="swu.zk.bean.UserService2">-->
+    <!--        <property name="uId" value="10001"/>-->
+    <!--        <property name="company" value="腾讯"/>-->
+    <!--        <property name="location" value="深圳"/>-->
+    <!--        <property name="userDao" ref="userDao"/>-->
+    <!--    </bean>-->
 
-<!--    <bean class="swu.zk.bean.MyBeanPostProcessor"/>-->
-<!--    <bean class="swu.zk.bean.MyBeanFactoryPostProcessor"/>-->
+    <!--    <bean class="swu.zk.bean.MyBeanPostProcessor"/>-->
+    <!--    <bean class="swu.zk.bean.MyBeanFactoryPostProcessor"/>-->
 
 
+<!--    <bean id="userService" class="swu.zk.bean.UserService3" scope="prototype">-->
+<!--        <property name="uId" value="10001"/>-->
+<!--        <property name="company" value="腾讯"/>-->
+<!--        <property name="location" value="深圳"/>-->
+<!--        <property name="userDao" ref="proxyUserDao"/>-->
+<!--    </bean>-->
+
+<!--    <bean id="proxyUserDao" class="swu.zk.bean.ProxyBeanFactory"/>-->
+
+
+    <bean class="swu.zk.bean.ContextRefreshedEventListener"/>
+
+    <bean class="swu.zk.bean.CustomEventListener"/>
+
+    <bean class="swu.zk.bean.ContextClosedEventListener"/>
 
 </beans>

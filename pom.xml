@@ -24,6 +24,11 @@
             <artifactId>hutool-all</artifactId>
             <version>4.1.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjdk.jol</groupId>
+            <artifactId>jol-cli</artifactId>
+            <version>0.14</version>
+        </dependency>
     </dependencies>
 
 

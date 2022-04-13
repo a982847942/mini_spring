@@ -2,6 +2,7 @@ package swu.zk.beans.factory.support;
 
 import swu.zk.beans.BeansException;
 import swu.zk.beans.factory.BeanFactory;
+import swu.zk.beans.factory.FactoryBean;
 import swu.zk.beans.factory.config.BeanDefinition;
 import swu.zk.beans.factory.config.BeanPostProcessor;
 import swu.zk.beans.factory.config.ConfigurableBeanFactory;
@@ -16,7 +17,7 @@ import java.util.List;
  * @Date 2022/4/8 21:19
  * @Created by brain
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory {
     /** BeanPostProcessors to apply in createBean */
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
 
@@ -47,12 +48,43 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     }
 
     protected <T> T doGetBean(final  String beanName, Object[] args){
-        Object bean = getSingleton(beanName);
-        if (bean != null) return (T)bean;
+//        Object bean = getSingleton(beanName);
+//        if (bean != null) return (T)bean;
+//        BeanDefinition beanDefinition = getBeanDefinition(beanName);
+//        bean = createBean(beanName,beanDefinition,args);
+//        return (T)bean;
+
+        Object sharedInstance = getSingleton(beanName);
+        if (sharedInstance != null) {
+            // 如果是 FactoryBean，则需要调用 FactoryBean#getObject
+            return (T) getObjectForBeanInstance(sharedInstance, beanName);
+        }
+
         BeanDefinition beanDefinition = getBeanDefinition(beanName);
-        bean = createBean(beanName,beanDefinition,args);
-        return (T)bean;
+        Object bean = createBean(beanName, beanDefinition, args);
+        return (T) getObjectForBeanInstance(bean, beanName);
     }
+
+    private Object getObjectForBeanInstance(Object beanInstance, String beanName) {
+        //不是FactoryBean 则直接返回即可
+        if (!(beanInstance instanceof FactoryBean)) {
+            return beanInstance;
+        }
+
+        //先从缓存池获取
+        Object object = getCachedObjectForFactoryBean(beanName);
+
+        //获取池获取为null
+        if (object == null) {
+            FactoryBean<?> factoryBean = (FactoryBean<?>) beanInstance;
+            //尝试重新创建bean
+            object = getObjectFromFactoryBean(factoryBean, beanName);
+        }
+
+        return object;
+    }
+
+
 
     protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
     protected abstract Object createBean(String beanName,BeanDefinition definition,Object[] args) throws BeansException;

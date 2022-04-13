@@ -16,8 +16,22 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Created by brain
  */
 public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
-    private Map<String,Object> singletonObjects = new ConcurrentHashMap<>();
+    /**
+     * Internal marker for a null singleton object:
+     * used as marker value for concurrent Maps (which don't support null values).
+     * concurrentHashMap不支持null键  null值
+     */
+    protected static final Object NULL_OBJECT = new Object();
+    /**
+     *单例池
+     */
+    private Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
+
+    /**
+     * 单例对象且实现了DisposableBean接口或xml配置了destroy方法  这里DisposableBean其实都是DisposableBeanAdapter对象
+     */
     private final Map<String, DisposableBean> disposableBeans = new HashMap<>();
+
 
     @Override
     public Object getSingleton(String beanName) {
@@ -26,12 +40,13 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 
     /**
      * 添加单例bean  第一次没有的话在createBean之后会调用该方法
+     *
      * @param beanName
      * @param singletonObject
      */
 
-    protected void addSingleton(String beanName,Object singletonObject){
-        singletonObjects.put(beanName,singletonObject);
+    protected void addSingleton(String beanName, Object singletonObject) {
+        singletonObjects.put(beanName, singletonObject);
     }
 
     public void registerDisposableBean(String beanName, DisposableBean bean) {
@@ -52,5 +67,9 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
                 throw new BeansException("Destroy method on bean with name '" + beanName + "' threw an exception", e);
             }
         }
+    }
+
+    public void registerSingleton(String beanName, Object singletonObject) {
+        singletonObjects.put(beanName, singletonObject);
     }
 }

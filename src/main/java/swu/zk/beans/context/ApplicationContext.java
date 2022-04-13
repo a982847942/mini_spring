@@ -1,6 +1,8 @@
 package swu.zk.beans.context;
 
+import swu.zk.beans.factory.HierarchicalBeanFactory;
 import swu.zk.beans.factory.ListableBeanFactory;
+import swu.zk.io.ResourceLoader;
 
 /**
  * @Classname ApplicationContext
@@ -8,6 +10,6 @@ import swu.zk.beans.factory.ListableBeanFactory;
  * @Date 2022/4/9 20:22
  * @Created by brain
  */
-public interface ApplicationContext extends ListableBeanFactory {
+public interface ApplicationContext extends ListableBeanFactory, HierarchicalBeanFactory, ResourceLoader, ApplicationEventPublisher {
 
 }

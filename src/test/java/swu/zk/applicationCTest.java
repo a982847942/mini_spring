@@ -1,10 +1,8 @@
 package swu.zk;
 
 import org.junit.Test;
-import swu.zk.bean.MyBeanFactoryPostProcessor;
-import swu.zk.bean.MyBeanPostProcessor;
-import swu.zk.bean.UserService;
-import swu.zk.bean.UserService2;
+import org.openjdk.jol.info.ClassLayout;
+import swu.zk.bean.*;
 import swu.zk.beans.context.support.ClassPathXmlApplicationContext;
 import swu.zk.beans.factory.support.DefaultListableBeanFactory;
 import swu.zk.beans.factory.xml.XMLBeanDefinitionReader;
@@ -81,5 +79,38 @@ public class applicationCTest {
         System.out.println("测试结果：" + result);
         System.out.println("ApplicationContextAware："+userService2.getApplicationContext());
         System.out.println("BeanFactoryAware："+userService2.getBeanFactory());
+    }
+
+
+
+    @Test
+    public void test_prototype() {
+        // 1.初始化 BeanFactory
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        applicationContext.registerShutdownHook();
+
+        // 2. 获取Bean对象调用方法
+        UserService3 userService01 = applicationContext.getBean("userService", UserService3.class);
+        UserService3 userService02 = applicationContext.getBean("userService", UserService3.class);
+
+        // 3. 配置 scope="prototype/singleton"
+        System.out.println(userService01);
+        System.out.println(userService02);
+
+        // 4. 打印十六进制哈希
+        System.out.println(userService01 + " 十六进制哈希：" + Integer.toHexString(userService01.hashCode()));
+        System.out.println(ClassLayout.parseInstance(userService01).toPrintable());
+
+    }
+
+    @Test
+    public void test_factory_bean() {
+        // 1.初始化 BeanFactory
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        applicationContext.registerShutdownHook();
+
+        // 2. 调用代理方法
+        UserService3 userService = applicationContext.getBean("userService", UserService3.class);
+        System.out.println("测试结果：" + userService.queryUserInfo());
     }
 }
