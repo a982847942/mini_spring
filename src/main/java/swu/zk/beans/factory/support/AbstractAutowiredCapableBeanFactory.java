@@ -6,10 +6,7 @@ import swu.zk.beans.BeansException;
 import swu.zk.beans.PropertyValue;
 import swu.zk.beans.PropertyValues;
 import swu.zk.beans.factory.*;
-import swu.zk.beans.factory.config.AutowireCapableBeanFactory;
-import swu.zk.beans.factory.config.BeanDefinition;
-import swu.zk.beans.factory.config.BeanPostProcessor;
-import swu.zk.beans.factory.config.BeanReference;
+import swu.zk.beans.factory.config.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -46,11 +43,24 @@ public abstract class AbstractAutowiredCapableBeanFactory extends AbstractBeanFa
          * bean实例化
          */
         try {
+            // 判断是否返回代理 Bean 对象
+            bean = resolveBeforeInstantiation(beanName, definition);
+            if (null != bean) {
+                return bean;
+            }
+
+            //实例化bean 可以采用JDK 或 Cglib
             bean = createBeanInstance(beanName,definition,args);
+
+            // 在设置 Bean 属性之前，允许 BeanPostProcessor 修改属性值
+            applyBeanPostProcessorsBeforeApplyingPropertyValues(beanName, bean, definition);
+
             //填充属性
             applyPropertyValues(beanName,bean,definition);
+
             // 执行 Bean 的初始化方法和 BeanPostProcessor 的前置和后置处理方法
             bean = initializeBean(beanName, bean, definition);
+
         }catch (Exception e){
             throw new BeansException("Instantiation of bean failed",e);
         }
@@ -67,6 +77,44 @@ public abstract class AbstractAutowiredCapableBeanFactory extends AbstractBeanFa
         }
         return bean;
     }
+
+    /**
+     * 在设置 Bean 属性之前，允许 BeanPostProcessor 修改属性值
+     *
+     * @param beanName
+     * @param bean
+     * @param beanDefinition
+     */
+    protected void applyBeanPostProcessorsBeforeApplyingPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor){
+                PropertyValues pvs = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessPropertyValues(beanDefinition.getPropertyValues(), bean, beanName);
+                if (null != pvs) {
+                    for (PropertyValue propertyValue : pvs.getPropertyValues()) {
+                        beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
+                    }
+                }
+            }
+        }
+    }
+
+    protected Object resolveBeforeInstantiation(String beanName, BeanDefinition beanDefinition) {
+        Object bean = applyBeanPostProcessorsBeforeInstantiation(beanDefinition.getBeanClass(), beanName);
+        if (null != bean) {
+            bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
+        }
+        return bean;
+    }
+    protected Object applyBeanPostProcessorsBeforeInstantiation(Class<?> beanClass, String beanName) {
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                Object result = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessBeforeInstantiation(beanClass, beanName);
+                if (null != result) return result;
+            }
+        }
+        return null;
+    }
+
 
     protected void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
         // 非 Singleton 类型的 Bean 不执行销毁方法
@@ -153,7 +201,6 @@ public abstract class AbstractAutowiredCapableBeanFactory extends AbstractBeanFa
                 ((BeanNameAware) wrappedBean).setBeanName(beanName);
             }
         }
-
 
 
         // 1. 实现接口 InitializingBean

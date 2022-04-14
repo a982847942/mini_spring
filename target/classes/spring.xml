@@ -31,13 +31,15 @@
     <!--    <bean class="swu.zk.bean.ContextClosedEventListener"/>-->
 
 
-    <bean class="swu.zk.beans.factory.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:token.properties"/>
-    </bean>
+<!--    <bean class="swu.zk.beans.factory.PropertyPlaceholderConfigurer">-->
+<!--        <property name="location" value="classpath:token.properties"/>-->
+<!--    </bean>-->
 
-    <bean id="userService" class="swu.zk.placeholder.UserService">
-        <property name="token" value="${token}"/>
-    </bean>
+<!--    <bean id="userService" class="swu.zk.placeholder.UserService">-->
+<!--        <property name="token" value="${token}"/>-->
+<!--    </bean>-->
+
+
 
 
 </beans>

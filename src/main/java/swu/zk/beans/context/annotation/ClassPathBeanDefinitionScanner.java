@@ -1,9 +1,11 @@
 package swu.zk.beans.context.annotation;
 
 import cn.hutool.core.util.StrUtil;
+import swu.zk.beans.factory.anntation.AutowiredAnnotationBeanPostProcessor;
 import swu.zk.beans.factory.config.BeanDefinition;
 import swu.zk.beans.factory.support.BeanDefinitionRegistry;
 
+import java.lang.annotation.Annotation;
 import java.util.Set;
 
 /**
@@ -28,6 +30,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
      */
     public void doScan(String... basePackages) {
         for (String basePackage : basePackages) {
+            //找出在basePackages 下 具有 Component Service  Repository 注解的类 并包装为BeanDefinition
             Set<BeanDefinition> candidates = findCandidateComponents(basePackage);
             for (BeanDefinition beanDefinition : candidates) {
                 // 解析 Bean 的作用域 singleton、prototype
@@ -36,9 +39,12 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
                     beanDefinition.setScope(beanScope);
                 }
                 //注册到beanDefinitionMap<beanName,Definition>
+                //determineBeanName 是获取注解的value值 如果没有则采用默认值
                 registry.registryBeanDefinition(determineBeanName(beanDefinition), beanDefinition);
             }
         }
+        // 注册处理注解的 BeanPostProcessor（@Autowired、@Value）
+        registry.registryBeanDefinition("swu.zk.beans.context.annotation.internalAutowiredAnnotationProcessor", new BeanDefinition(AutowiredAnnotationBeanPostProcessor.class));
     }
 
     private String resolveBeanScope(BeanDefinition beanDefinition) {
@@ -51,16 +57,29 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
     private String determineBeanName(BeanDefinition beanDefinition) {
         Class<?> beanClass = beanDefinition.getBeanClass();
         String value = null;
-        if (beanClass.isAssignableFrom(Component.class)){
+        Annotation annotation = beanClass.getAnnotation(Component.class);
+        if (annotation != null){
             Component component = beanClass.getAnnotation(Component.class);
             value = component.value();
-        }else if (beanClass.isAssignableFrom(Service.class)){
+        }else if ((annotation = beanClass.getAnnotation(Service.class)) != null){
             Service service = beanClass.getAnnotation(Service.class);
             value = service.value();
-        }else if (beanClass.isAssignableFrom(Repository.class)){
-            Repository repository = beanClass.getAnnotation(Repository.class);
+        }else if ((annotation = beanClass.getAnnotation(Repository.class)) != null){
+            Repository repository = beanClass.getAnnotation( Repository.class);
             value = repository.value();
         }
+
+
+//        if (beanClass.isAssignableFrom(Component.class)){
+//            Component component = beanClass.getAnnotation(Component.class);
+//            value = component.value();
+//        }else if (beanClass.isAssignableFrom(Service.class)){
+//            Service service = beanClass.getAnnotation(Service.class);
+//            value = service.value();
+//        }else if (beanClass.isAssignableFrom(Repository.class)){
+//            Repository repository = beanClass.getAnnotation(Repository.class);
+//            value = repository.value();
+//        }
         if (StrUtil.isEmpty(value)) {
             value = StrUtil.lowerFirst(beanClass.getSimpleName());
         }

@@ -89,9 +89,12 @@ public class XMLBeanDefinitionReader extends AbstractBeanDefinitionReader {
             scanPackage(scanPath);
         }
 
+
+
         List<Element> beanList = root.elements("bean");
         for (Element bean : beanList) {
 
+            //解析beanDefinition的属性
             String id = bean.attributeValue("id");
             String name = bean.attributeValue("name");
             String className = bean.attributeValue("class");
@@ -117,7 +120,7 @@ public class XMLBeanDefinitionReader extends AbstractBeanDefinitionReader {
             }
 
             List<Element> propertyList = bean.elements("property");
-            // 读取属性并填充
+            // 读取bean的属性并填充
             for (Element property : propertyList) {
                 // 解析标签：property
                 String attrName = property.attributeValue("name");

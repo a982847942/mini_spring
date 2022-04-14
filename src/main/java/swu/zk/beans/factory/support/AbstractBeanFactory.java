@@ -7,6 +7,7 @@ import swu.zk.beans.factory.config.BeanDefinition;
 import swu.zk.beans.factory.config.BeanPostProcessor;
 import swu.zk.beans.factory.config.ConfigurableBeanFactory;
 import swu.zk.util.ClassUtils;
+import swu.zk.util.StringValueResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,11 @@ import java.util.List;
 public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory {
     /** BeanPostProcessors to apply in createBean */
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
+
+    /**
+     * String resolvers to apply e.g. to annotation attribute values
+     */
+    private List<StringValueResolver> embeddedValueResolvers = new ArrayList<>();
 
     private ClassLoader classLoader = ClassUtils.getDefaultClassloader();
     @Override
@@ -56,7 +62,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
         Object sharedInstance = getSingleton(beanName);
         if (sharedInstance != null) {
-            // 如果是 FactoryBean，则需要调用 FactoryBean#getObject
+            // 如果是 FactoryBean，则需要调用 FactoryBean的getObject方法返回真正的对象
             return (T) getObjectForBeanInstance(sharedInstance, beanName);
         }
 
@@ -96,6 +102,20 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
         this.beanPostProcessors.add(beanPostProcessor);
     }
 
+    @Override
+    public void addEmbeddedValueResolver(StringValueResolver valueResolver){
+        this.embeddedValueResolvers.add(valueResolver);
+    }
+
+
+    @Override
+    public String resolveEmbeddedValue(String value) {
+        String result = value;
+        for (StringValueResolver resolver : this.embeddedValueResolvers) {
+            result = resolver.resolveStringValue(result);
+        }
+        return result;
+    }
     /**
      * Return the list of BeanPostProcessors that will get applied
      * to beans created with this factory.

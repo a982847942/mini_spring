@@ -37,22 +37,25 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
         //2.获取beanFactory
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+
         // 3. 添加 ApplicationContextAwareProcessor，让继承自 ApplicationContextAware 的 Bean 对象都能感知所属的 ApplicationContext
         beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
 
-        //3.在 Bean 实例化之前，执行 BeanFactoryPostProcessor (Invoke factory processors registered as beans in the context.)
+        //4.在 Bean 实例化之前，执行 BeanFactoryPostProcessor (Invoke factory processors registered as beans in the context.)
         invokeBeanFactoryPostProcessors(beanFactory);
 
-        // 4. BeanPostProcessor 需要提前于其他 Bean 对象实例化之前执行注册操作
+        // 5. BeanPostProcessor 需要提前于其他 Bean 对象实例化之前执行注册操作
         registerBeanPostProcessors(beanFactory);
-        // 5. 提前实例化单例Bean对象
-        beanFactory.preInstantiateSingletons();
+
 
         // 6. 初始化事件发布者
         initApplicationEventMulticaster();
 
         // 7. 注册事件监听器
         registerListeners();
+
+        // 8. 提前实例化单例Bean对象
+        beanFactory.preInstantiateSingletons();
 
         // 9. 发布容器刷新完成事件
         finishRefresh();
@@ -134,6 +137,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
     @Override
     public Object getBean(String name, Object... args) throws BeansException {
         return getBeanFactory().getBean(name, args);
+    }
+
+    @Override
+    public <T> T getBean(Class<T> requiredType) throws BeansException {
+        return getBeanFactory().getBean(requiredType);
     }
 
     @Override
